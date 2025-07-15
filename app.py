@@ -1,34 +1,37 @@
 import streamlit as st
-import pickle
-import numpy as np
 
-# Load trained model
-model = pickle.load(open('flat_price_model.pkl', 'rb'))
+st.set_page_config(page_title="🏠 Flat Price Predictor", page_icon="🏠", layout="wide")
 
-st.title("🏢 Flat Price Predictor & Buy Recommendation")
+# Custom CSS
+st.markdown("""
+    <style>
+        body {background-color: #121212; color: #FFFFFF;}
+        h1, h2, h3 {color: #FF5733;}
+        .main {
+            text-align: center;
+        }
+        @keyframes float {
+            0% {transform: translateY(0);}
+            50% {transform: translateY(-10px);}
+            100% {transform: translateY(0);}
+        }
+        .floating-header {
+            animation: float 3s ease-in-out infinite;
+            font-size: 40px;
+            font-weight: bold;
+            color: #FF5733;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-# Inputs from user
-sqft = st.number_input("Enter Total Square Feet", 500, 5000)
-bhk = st.slider("Number of BHK", 1, 10)
-bath = st.slider("Number of Bathrooms", 1, 10)
-budget = st.number_input("Your Budget (in ₹ Lakhs)", 10, 1000)
+st.markdown("<div class='floating-header'>🏠 Welcome to Flat Price Predictor</div>", unsafe_allow_html=True)
+st.write("### Predict. Analyze. Decide with Confidence.")
+st.write("---")
+st.write("✅ **Features**:")
+st.write("- AI-Powered Flat Price Prediction")
+st.write("- Budget Check & Recommendation")
+st.write("- Cheaper Alternatives")
+st.write("- Explainable AI (SHAP)")
+st.write("- Interactive Analytics Dashboard")
 
-# For now, we won't use location encoding manually (you can improve later)
-# We'll just take example input vector: sqft, bath, bhk + zero for locations
-# In real deployment, we need the full dummy variable list from training
-
-if st.button("Predict & Recommend"):
-    # IMPORTANT: Adjust input size as per your model's features
-    # For simplicity, let's use only sqft, bath, bhk
-    input_data = np.array([sqft, bath, bhk] + [0]*(model.n_features_in_-3)).reshape(1, -1)
-
-    predicted_price = model.predict(input_data)[0]
-    st.subheader(f"Predicted Price: ₹ {predicted_price:.2f} Lakhs")
-
-    # Buy/Not Buy Logic
-    if predicted_price <= budget:
-        st.success("✅ Yes! This flat is within your budget.")
-    elif predicted_price <= budget * 1.1:
-        st.warning("⚠️ Slightly above budget, consider negotiation.")
-    else:
-        st.error("❌ No! Overpriced for your budget.")
+st.success("👉 Use the sidebar to navigate between **Predict**, **Dashboard**, and **About** pages.")
